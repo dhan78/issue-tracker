@@ -20,18 +20,8 @@ const newIssuePage = () => {
     const {register, control, handleSubmit, formState:{errors}} = useForm<IssueForm>({
         resolver: zodResolver(createIssueSchema)
     });
-    // console.log(register('title'))
-    const [error, setError ] = useState('')
-    const[isSubmitting, setSubmitting] = useState(false);
 
-  return (
-    <div className='max-w-xl'>
-        {error && <Callout.Root color="red" className='mb-5'>
-            <Callout.Text>{error}</Callout.Text>
-            </Callout.Root>}
-    <form className='max-w-xl space-y-3' 
-    // onSubmit={handleSubmit((data)=>console.log(data))}
-    onSubmit={handleSubmit
+    const processSubmit=handleSubmit
         (
             async (data)=>
             {
@@ -46,15 +36,27 @@ const newIssuePage = () => {
                 }
                     
             }
-        )}>
+        )
+    // console.log(register('title'))
+    const [error, setError ] = useState('')
+    const[isSubmitting, setSubmitting] = useState(false);
+
+  return (
+    <div className='max-w-xl'>
+        {error && <Callout.Root color="red" className='mb-5'>
+            <Callout.Text>{error}</Callout.Text>
+            </Callout.Root>}
+    <form className='max-w-xl space-y-3' 
+    // onSubmit={handleSubmit((data)=>console.log(data))}
+        onSubmit={processSubmit}>
         <TextField.Root placeholder='Title' {...register('title')}>
             {/* <TextField.  /> */}
         </TextField.Root>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
         <Controller
-        name="description"
-        control={control} 
-        render={({field}) => <SimpleMDE placeholder="Add Description..." {...field}/>}
+            name="description"
+            control={control} 
+            render={({field}) => <SimpleMDE placeholder="Add Description..." {...field}/>}
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button disabled = {isSubmitting}>
